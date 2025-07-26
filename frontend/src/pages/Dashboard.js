@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Button,
-  IconButton,
-  Grid,
-  Paper
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Button, IconButton, Grid, Paper } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Logo from "../media/namedLogo.png"
 

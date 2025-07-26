@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Paper,
-  CssBaseline,
-  AppBar,
-  Toolbar,
-  Button,
-  IconButton,
-} from '@mui/material';
+import { Box, Typography, Paper, CssBaseline, AppBar, Toolbar, Button, IconButton } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function HierarchyView() {
