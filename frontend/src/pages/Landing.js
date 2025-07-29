@@ -33,21 +33,21 @@ export default function Landing() {
           <Stack spacing={2} alignItems="center">
             <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
-                <Box component="img" src={Logo} alt="desc" sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>
             </Stack>
 
             <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
-                <Box component="img" src={Logo} alt="desc" sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>             
             </Stack>
 
             <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
-                <Box component="img" src={Logo} alt="desc" sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>              
               <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
             </Stack>

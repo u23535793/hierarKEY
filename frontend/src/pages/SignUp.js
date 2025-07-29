@@ -3,6 +3,9 @@ import { Container, TextField, Button, Box, Typography, IconButton, InputAdornme
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'; 
 
+import { checkOrganisationExists, checkEmailExists } from '../requests/read';
+import { signUp } from '../requests/create';
+
 export default function SignUp() {
     const navigate = useNavigate(); 
     const [formData, setFormData] = useState({ organisation: '', name: '', surname: '', email: '', password: '' });
@@ -11,44 +14,6 @@ export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
     const [agreedToSaveData, setAgreedToSaveData] = useState(false);
     const [error, setError] = useState('');
-    
-    async function checkOrganisationExists(orgName) {
-        try {
-            const response = await fetch(`http://localhost:3001/organisations/exists?name=${encodeURIComponent(orgName)}`);
-            const result = await response.json();
-
-            console.log(result); 
-            if (response.ok) {
-                return result.exists;  
-            } else {
-                console.error('Server error:', result.error);
-                return null;
-            }
-        } 
-        catch (error) {
-            console.error('Fetch error:', error);
-            return null;
-        }
-    }
-
-    async function checkEmailExists(email) {
-        try {
-            const response = await fetch(`http://localhost:3001/employees?new_email=${encodeURIComponent(email)}`);
-            const result = await response.json();
-
-            if (response.ok) {
-                return result.exists;
-            } 
-            else {
-                console.error('Server error:', result.error);
-                return null;
-            }
-        } 
-        catch (error) {
-            console.error('Fetch error:', error);
-            return null;
-        }
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -91,11 +56,14 @@ export default function SignUp() {
         }
 
         setError('');
-        const finalData = {
-            ...formData,
-        };
 
-        console.log('Form data:', finalData);
+        const result = await signUp(formData.organisation.trim(), formData.name.trim(), formData.surname.trim(), formData.email.trim(), formData.password); 
+        if (result && result.message === 'Sign up successful') {
+            navigate('/dashboard');
+        } 
+        else {
+            setError('Signup failed:', result?.error || 'Unknown error');
+        }
     };
 
     return (

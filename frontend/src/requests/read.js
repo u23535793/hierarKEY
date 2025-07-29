@@ -3,7 +3,6 @@ export async function checkOrganisationExists(orgName) {
         const response = await fetch(`http://localhost:3001/organisations/exists?name=${encodeURIComponent(orgName)}`);
         const result = await response.json();
 
-        console.log(result); 
         if (response.ok) {
             return result.exists;  
         } else {
@@ -19,7 +18,7 @@ export async function checkOrganisationExists(orgName) {
 
 export async function checkEmailExists(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees?new_email=${encodeURIComponent(email)}`);
+        const response = await fetch(`http://localhost:3001/employees/email_exists?new_email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {

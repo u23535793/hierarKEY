@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, TextField, FormControl, Button, IconButton, InputAdornment, Autocomplete } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 
 export default function Login() {
   const navigate = useNavigate(); 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ organisation: '', email: '', password: '' });
+  const [organisations, setOrganisations] = useState([]);
 
-  const organisations = ['OrgOne', 'OrgTwo', 'OrgThree'];
+  useEffect(() => {
+    axios.get('http://localhost:3001/organisations/get')
+      .then(response => {
+        console.log('Organisations:', response.data); 
+        setOrganisations(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching organisations:', error);
+      });
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -32,7 +43,14 @@ export default function Login() {
 
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth margin="normal" required>
-            <Autocomplete options={organisations} value={formData.organisation}
+            <Autocomplete 
+            options={organisations.sort((a, b) => {
+              if (!a.name) return 1;
+              if (!b.name) return -1;
+              return a.name.localeCompare(b.name);
+            })}
+            value={formData.organisation} 
+            getOptionLabel={(option) => option?.name || ''}
               onChange={(event, newValue) => {
                 setFormData((prev) => ({
                   ...prev,
