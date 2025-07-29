@@ -1,24 +1,9 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Stack } from '@mui/material';
 import Logo from "../media/namedLogo.png"
-import axios from 'axios';
 
 export default function Landing() {
-  const [organisations, setOrganisations] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:3001/organisations')
-      .then(response => {
-        console.log('Organisations:', response.data); 
-        setOrganisations(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching organisations:', error);
-      });
-  }, []);
-
   return (
     <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh' }}>
       <AppBar position="static" elevation={1} sx={{ backgroundColor: 'background.default' }}>
