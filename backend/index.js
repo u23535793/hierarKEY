@@ -6,9 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// routes
-const orgRoute = require('./routes/organisations');
-const empRoute = require('./routes/employees');
+const orgRoute = require('./api/organisations');
+const empRoute = require('./api/employees');
 
 app.use('/organisations', orgRoute);
 app.use('/employees', empRoute);
