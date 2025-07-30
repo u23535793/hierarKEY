@@ -74,18 +74,41 @@ export async function checkEmployExistsInOrg(email, orgName) {
     }
 }
 
+export async function hash(input) {
+    const saltedInput = '3UT@2025' + input;
+
+    const encoded = new TextEncoder().encode(saltedInput);
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+
+    const hashHex = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+
+    return hashHex;
+}
+
 export async function login(email, password) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        const response = await fetch(`http://localhost:3001/employees/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
         const result = await response.json();
 
         if (response.ok) {
+            sessionStorage.setItem('email', email);
+            const access = await hash(email); 
+            sessionStorage.setItem('access', access);
             return result; 
-        } else {
+        } 
+        else {
             console.error('Server error:', result.error);
             return null;
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Fetch error:', error);
         return null;
     }

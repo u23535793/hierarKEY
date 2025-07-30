@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../connection/supabaseClient');
-const { signUp } = require('../../frontend/src/requests/create');
 
 // check if email is unique
 router.get('/email_exists', async (req, res) => {
@@ -93,9 +92,9 @@ router.get('/empl_exists', async (req, res) => {
 });
 
 // login
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.query; 
+        const { email, password } = req.body; 
 
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -110,6 +109,6 @@ router.get('/login', async (req, res) => {
         console.error('Unexpected error:', err);
         return res.status(500).json({ error: 'Internal server error' });
     }
-});
+}); 
 
 module.exports = router;

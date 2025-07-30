@@ -43,10 +43,11 @@ export default function Login() {
     setError('');
 
     const loginData = await login(formData.email.trim(), formData.password);
+    const userEmail = sessionStorage.getItem('email');
+    console.log(userEmail);
 
     if (loginData) {
-      // console.log('User:', loginData.user);
-      navigate('/dashboard');
+        navigate('/dashboard');
     } 
     else {
       setError('Login failed.');

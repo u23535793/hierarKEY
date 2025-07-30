@@ -55,7 +55,6 @@ export async function signUp(orgName, name, surname, email, password) {
         });
 
         const result = await response.json();
-        console.log(result); 
 
         if (response.ok) {
             return result; 

@@ -23,7 +23,6 @@ export default function Dashboard() {
           <Box sx={{ display: 'flex', gap: 3, flex: 1, justifyContent: 'center' }}>
             <Button color="inherit">Hierarchy View</Button>
             <Button color="inherit">Employee List</Button>
-            <Button color="inherit">Project List</Button>
           </Box>
 
           {/* Right-side Profile & Logout */}
