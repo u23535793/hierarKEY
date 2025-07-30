@@ -1,33 +1,12 @@
 import React from 'react';
-import { Box, Typography, Paper, CssBaseline, AppBar, Toolbar, Button, IconButton } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { Box, Typography, Paper } from '@mui/material';
+
+import NavBar from '../components/navbar'; 
 
 export default function HierarchyView() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100vw' }}>
-      <CssBaseline />
-
-      {/* Top Navbar (repeated here, or extract to a shared component) */}
-      <AppBar position="static" color="primary">
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" sx={{ flex: 1 }}>
-            MyDashboard
-          </Typography>
-
-          <Box sx={{ display: 'flex', gap: 3, flex: 1, justifyContent: 'center' }}>
-            <Button color="inherit" variant="outlined">Hierarchy View</Button>
-            <Button color="inherit">Employee List</Button>
-            <Button color="inherit">Project List</Button>
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 2, flex: 1, justifyContent: 'flex-end' }}>
-            <Button color="inherit">Profile</Button>
-            <IconButton color="inherit">
-              <LogoutIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <NavBar />
 
       {/* Page Content */}
       <Box sx={{ flex: 1, padding: 3, overflow: 'auto', width: '100%' }}>

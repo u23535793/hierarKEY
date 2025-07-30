@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import HierarchyView from './pages/HierarchyView';
+import EmployeeList from './pages/EmployeeList';
 import Profile from './pages/Profile';
 
 import { hash } from './requests/read'
@@ -75,6 +76,9 @@ export default function App() {
         />
         <Route path="/hierarchy"
           element={<ProtectedRoute><HierarchyView /></ProtectedRoute>}
+        />
+        <Route path="/employees"
+          element={<ProtectedRoute><EmployeeList /></ProtectedRoute>}
         />
         <Route path="/profile"
           element={<ProtectedRoute><Profile /></ProtectedRoute>}

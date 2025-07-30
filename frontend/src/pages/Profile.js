@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Button, Grid, Paper, TextField, Typography, Stack } from '@mui/material';
+import { Avatar, Button, Grid, Paper, TextField, Typography, Stack } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+
+import NavBar from '../components/navbar'; 
 
 export default function Profile() {
   const [formData, setFormData] = useState({
@@ -32,7 +34,9 @@ export default function Profile() {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <>
+      <NavBar />
+
       <Typography variant="h4" gutterBottom>
         Profile
       </Typography>
@@ -108,6 +112,6 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Paper>
-    </Box>
+    </>
   );
 }
