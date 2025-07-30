@@ -71,4 +71,45 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+// check if employee exists in the organisation 
+router.get('/empl_exists', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+        const org_name = req.query.org_name; 
+
+        const { data, error } = await supabase.rpc('exists_empl_in_org', {emp_email, org_name});
+
+        if (error) {
+            console.error('Error checking if employee exists:', error);  
+            return res.status(500).json({ error: 'Failed to check if employee exists' });
+        }
+
+        res.status(200).json({ exists: data });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// login
+router.get('/login', async (req, res) => {
+    try {
+        const { email, password } = req.query; 
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            console.error('Login error:', error.message);
+            return res.status(401).json({ error: 'Failed to login' });
+        }
+
+        return res.status(200).json({ user: data.user, session: data.session });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router;

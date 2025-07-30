@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, TextField, FormControl, Button, IconButton, InputAdornment, Autocomplete } from '@mui/material';
+import { Container, Box, Typography, TextField, FormControl, Button, IconButton, InputAdornment, Autocomplete, Alert } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
+
+import { getAllOrganisations, checkEmployExistsInOrg, login } from '../requests/read';
 
 export default function Login() {
   const navigate = useNavigate(); 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ organisation: '', email: '', password: '' });
   const [organisations, setOrganisations] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/organisations/get')
-      .then(response => {
-        console.log('Organisations:', response.data); 
-        setOrganisations(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching organisations:', error);
-      });
+    async function fetchOrganisations() {
+      const data = await getAllOrganisations(); 
+      if (data) {
+        setOrganisations(data); 
+      }
+    }
+    fetchOrganisations(); 
   }, []);
 
   const handleChange = (e) => {
@@ -26,11 +27,30 @@ export default function Login() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', formData);
+
+    const emplExists = await checkEmployExistsInOrg(formData.email.trim(), formData.organisation.name);
+    if (!emplExists) {
+      setError('Employee does not exist in this organisation.');
+      return;
+    }
+
+    setError('');
+
+    const loginData = await login(formData.email.trim(), formData.password);
+
+    if (loginData) {
+      // console.log('User:', loginData.user);
+      navigate('/dashboard');
+    } 
+    else {
+      setError('Login failed.');
+    }
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -41,7 +61,9 @@ export default function Login() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/')}  sx={{ mb: 2 }}>Back</Button>
         <Typography variant="h4" align="center" gutterBottom>LOGIN</Typography>
 
-        <Box component="form" onSubmit={handleSubmit} noValidate>
+        {error && <Alert severity="warning" sx={{ mb: 2 }}>{error}</Alert>}
+        
+        <Box component="form" onSubmit={handleSubmit} >
           <FormControl fullWidth margin="normal" required>
             <Autocomplete 
             options={organisations.sort((a, b) => {
