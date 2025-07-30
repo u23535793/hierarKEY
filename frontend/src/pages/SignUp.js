@@ -59,10 +59,7 @@ export default function SignUp() {
 
         const result = await signUp(formData.organisation.trim(), formData.name.trim(), formData.surname.trim(), formData.email.trim(), formData.password); 
         if (result && result.message === 'Sign up successful') {
-            if (result.session) {
-                localStorage.setItem('supabase.auth.token', JSON.stringify(result.session));
-                navigate('/dashboard');
-            }
+            navigate('/dashboard');
         } 
         else {
             setError('Signup failed');

@@ -20,10 +20,11 @@ export default function Landing() {
       </AppBar>
 
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mt: 4 }}>
-        <Box sx={{ flex: { xs: 'none', md: 5 }, textAlign: 'center', pt: 6, pl: 6, minWidth: 0 }}>
+        <Box sx={{ flex: { xs: 'none', md: 5 }, textAlign: 'center', pt: 5, pl: 6, minWidth: 0 }}>
           <Typography variant="h1" sx={{ fontFamily: 'Playfair Display', color: '#cb9043' }}>Welcome to hierarKEY</Typography>
-          <Box component="hr" sx={{ width: '250px', borderTop: '3px solid #031f2cdb', mx: 'auto', my: 2 }} />
           <Typography variant="h4" sx={{ fontFamily: 'Playfair Display', mt: 2 }}>The KEY to Smart Team Structure.</Typography>
+          <Box component="hr" sx={{ width: '250px', borderTop: '3px solid #031f2cdb', mx: 'auto', my: 2 }} />
+          <Typography variant="body1" sx={{ fontFamily: 'Playfair Display' }}>Effortlessly manage and visualise your organisation's employee hierarchy. Designed with HR professionals in mind, hieraKEY streamlines workforce structure, improves clarity and helps you keep your teams connected and aligned.</Typography>
           <Link to="/signup" style={{ textDecoration: 'none' }}>
             <Button variant="contained" sx={{ mt: 4, backgroundColor: 'secondary.main', color: 'primary.main', fontWeight: 'bold', borderColor: 'white', textTransform: 'none' }}>TRY NOW: structure your team today</Button>
           </Link>

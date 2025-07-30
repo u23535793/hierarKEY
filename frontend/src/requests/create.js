@@ -1,3 +1,5 @@
+import { hash } from './read'
+
 export async function insertOrganisation(orgName) {
     try {
         const response = await fetch('http://localhost:3001/organisations/insert', {
@@ -57,6 +59,9 @@ export async function signUp(orgName, name, surname, email, password) {
         const result = await response.json();
 
         if (response.ok) {
+            sessionStorage.setItem('email', email);
+            const access = await hash(email); 
+            sessionStorage.setItem('access', access);
             return result; 
         }
         else {
