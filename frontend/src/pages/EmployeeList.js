@@ -39,7 +39,11 @@ function AddEmployeePopup({ open, handleClose, handleSubmit, managerOptions}) {
   const handleLocalSubmit = async () => {
     const currEmail = sessionStorage.getItem('email');
     const editor = await isEditor(currEmail); 
-    console.log(editor); 
+
+    if (!editor) {
+      setError('Only editors can add new employees.');
+      return;
+    }
 
     const { name, surname, email, manager } = formData;
 

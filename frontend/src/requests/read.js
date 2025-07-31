@@ -250,7 +250,26 @@ export async function getOrgAccess(org_id) {
 
 export async function isEditor(email) {
     try {
-        const response = await fetch(`https://hierarkey.onrender.com/oemployees/is_editor?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/is_editor?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getUserDetails(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/user_details?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {

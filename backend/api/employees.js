@@ -305,4 +305,53 @@ router.get('/is_editor', async (req, res) => {
     }
 });
 
+// get current user details
+router.get('/user_details', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('my_details', {emp_email});
+
+        if (error) {
+            console.error('Error getting user details:', error);  
+            return res.status(500).json({ error: 'Failed to get user details' });
+        }
+        
+        res.status(200).json(data);
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// update employee details 
+router.put('/update_user', async (req, res) => {
+  const { email, name, surname, dob, empNum, position, salary, manager } = req.body;
+
+  try {
+    const { data, error } = await supabase.rpc('update_user_details', {
+      _email: email,
+      _name: name,
+      _surname: surname,
+      _dob: dob,
+      _emp_num: empNum,
+      _position: position,
+      _salary: salary,
+      _manager: manager
+    });
+
+    if (error) {
+      console.error('Update user error:', error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(200).json({ success: true, data });
+  } 
+  catch (err) {
+    console.error('Unexpected error during update user:', err);
+    return res.status(500).json({ error: 'Unexpected error during update user.' });
+  }
+});
+
 module.exports = router;
