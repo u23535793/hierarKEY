@@ -111,4 +111,104 @@ router.post('/login', async (req, res) => {
     }
 }); 
 
+// get num employees
+router.get('/num_empl', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('num_employees', {emp_email});
+
+        if (error) {
+            console.error('Error getting number employees:', error);  
+            return res.status(500).json({ error: 'Failed to get number employees' });
+        }
+
+        res.status(200).json({ data });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// get num managers
+router.get('/num_managers', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('num_managers', {emp_email});
+
+        if (error) {
+            console.error('Error getting number managers:', error);  
+            return res.status(500).json({ error: 'Failed to get number managers' });
+        }
+
+        res.status(200).json({ data });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// get num editors
+router.get('/num_editors', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('num_editors', {emp_email});
+
+        if (error) {
+            console.error('Error getting number managers:', error);  
+            return res.status(500).json({ error: 'Failed to get number managers' });
+        }
+
+        res.status(200).json({ data });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// get employee overview
+router.get('/emp_overview', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('emp_overview', {emp_email});
+
+        if (error) {
+            console.error('Error getting employee overview:', error);  
+            return res.status(500).json({ error: 'Failed to get employee overview' });
+        }
+        
+        res.status(200).json(data);
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// get employee details
+router.get('/emp_details', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('emp_details', {emp_email});
+
+        if (error) {
+            console.error('Error getting employee details:', error);  
+            return res.status(500).json({ error: 'Failed to get employee details' });
+        }
+        
+        res.status(200).json(data);
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
 module.exports = router;

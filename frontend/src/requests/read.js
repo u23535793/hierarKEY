@@ -113,3 +113,98 @@ export async function login(email, password) {
         return null;
     }
 }
+
+export async function getNumEmployees(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/num_empl?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getNumManagers(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/num_managers?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getNumEditors(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/num_editors?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getEmplOverview(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/emp_overview?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getEmplDetails(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/emp_details?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
