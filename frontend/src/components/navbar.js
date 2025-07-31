@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Box, Button, IconButton } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation , useNavigate} from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PortraitIcon from '@mui/icons-material/Portrait';
 import Logo from '../media/namedLogoLight.png';
@@ -8,6 +8,12 @@ import Logo from '../media/namedLogoLight.png';
 export default function NavBar() {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    sessionStorage.clear();
+    navigate('/');
+  };
 
   return (
     <AppBar position="static" color="primary">
@@ -31,7 +37,7 @@ export default function NavBar() {
           <IconButton aria-label="profile" sx={{ color: isActive('/profile') ? 'secondary.main' : 'background.default', '&:hover': { color: 'secondary.main' } }} component={Link} to="/profile" >
             <PortraitIcon />
           </IconButton>
-          <IconButton sx={{ color: 'background.default', '&:hover': { color: 'secondary.main' } }} component={Link} to="/profile"><LogoutIcon /></IconButton>
+          <IconButton sx={{ color: 'background.default', '&:hover': { color: 'secondary.main' } }} onClick={handleLogout}><LogoutIcon /></IconButton>
         </Box>
       </Toolbar>
     </AppBar>
