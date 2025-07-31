@@ -2,7 +2,7 @@ import { hash, getOrgID, getOrgAccess } from './read'
 
 export async function insertOrganisation(orgName) {
     try {
-        const response = await fetch('http://localhost:3001/organisations/insert', {
+        const response = await fetch('https://hierarkey.onrender.com/organisations/insert', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ org_name: orgName })
@@ -28,7 +28,7 @@ export async function signUp(orgName, name, surname, email, password) {
     let org_id; 
 
     try {
-        const response = await fetch('http://localhost:3001/organisations/insert', {
+        const response = await fetch('https://hierarkey.onrender.com/organisations/insert', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ org_name: orgName })
@@ -50,7 +50,7 @@ export async function signUp(orgName, name, surname, email, password) {
     }
 
     try {
-        const response = await fetch('http://localhost:3001/employees/signup', {
+        const response = await fetch('https://hierarkey.onrender.com/employees/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, name, surname, org_id })
@@ -88,7 +88,7 @@ export async function addEmployee(currEmail, emp_num, dob, email, name, surname,
     const managerValue = manager && manager.trim() !== '' ? manager : null;
 
     try {
-        const response = await fetch('http://localhost:3001/employees/new_empl', {
+        const response = await fetch('https://hierarkey.onrender.com/employees/new_empl', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ emp_num: empNumValue, dob: dobValue, email, password: access, name, surname, org_id, position: positionValue, salary: salaryValue, manager: managerValue, editor })

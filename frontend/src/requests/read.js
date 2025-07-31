@@ -1,6 +1,6 @@
 export async function checkOrganisationExists(orgName) {
     try {
-        const response = await fetch(`http://localhost:3001/organisations/exists?name=${encodeURIComponent(orgName)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/organisations/exists?name=${encodeURIComponent(orgName)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -19,7 +19,7 @@ export async function checkOrganisationExists(orgName) {
 
 export async function checkEmailExists(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/email_exists?new_email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/email_exists?new_email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -38,7 +38,7 @@ export async function checkEmailExists(email) {
 
 export async function getAllOrganisations() {
     try {
-        const response = await fetch(`http://localhost:3001/organisations/get`);
+        const response = await fetch(`https://hierarkey.onrender.com/organisations/get`);
         const result = await response.json();
 
         if (response.ok) {
@@ -57,7 +57,7 @@ export async function getAllOrganisations() {
 
 export async function checkEmployExistsInOrg(email, orgName) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/empl_exists?email=${encodeURIComponent(email)}&org_name=${encodeURIComponent(orgName)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/empl_exists?email=${encodeURIComponent(email)}&org_name=${encodeURIComponent(orgName)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -90,7 +90,7 @@ export async function hash(input) {
 
 export async function login(email, password) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/login`, {
+        const response = await fetch(`https://hierarkey.onrender.com/employees/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -116,7 +116,7 @@ export async function login(email, password) {
 
 export async function getNumEmployees(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/num_empl?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/num_empl?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -135,7 +135,7 @@ export async function getNumEmployees(email) {
 
 export async function getNumManagers(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/num_managers?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/num_managers?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -154,7 +154,7 @@ export async function getNumManagers(email) {
 
 export async function getNumEditors(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/num_editors?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/num_editors?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -173,7 +173,7 @@ export async function getNumEditors(email) {
 
 export async function getEmplOverview(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/emp_overview?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/emp_overview?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -192,7 +192,7 @@ export async function getEmplOverview(email) {
 
 export async function getEmplDetails(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/emp_details?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/emp_details?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -211,7 +211,7 @@ export async function getEmplDetails(email) {
 
 export async function getOrgID(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/get_org_id?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/get_org_id?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
@@ -230,7 +230,7 @@ export async function getOrgID(email) {
 
 export async function getOrgAccess(org_id) {
     try {
-        const response = await fetch(`http://localhost:3001/organisations/org_access?id=${encodeURIComponent(org_id)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/organisations/org_access?id=${encodeURIComponent(org_id)}`);
         const result = await response.json();
 
         // console.log(result); 
@@ -250,7 +250,7 @@ export async function getOrgAccess(org_id) {
 
 export async function isEditor(email) {
     try {
-        const response = await fetch(`http://localhost:3001/oemployees/is_editor?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/oemployees/is_editor?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
