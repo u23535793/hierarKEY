@@ -1,6 +1,6 @@
 export async function updateUserDetails(userData) {
   try {
-    const response = await fetch('http://localhost:3001/update_user', {
+    const response = await fetch('https://hierarkey.onrender.com/employees/update_user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

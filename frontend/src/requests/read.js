@@ -269,7 +269,7 @@ export async function isEditor(email) {
 
 export async function getUserDetails(email) {
     try {
-        const response = await fetch(`http://localhost:3001/employees/user_details?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`https://hierarkey.onrender.com/employees/user_details?email=${encodeURIComponent(email)}`);
         const result = await response.json();
 
         if (response.ok) {
