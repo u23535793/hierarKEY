@@ -26,7 +26,7 @@ export default function BuildTree(employeeList, type) {
     }
 
     const tree = {
-        name: 'Organization',
+        name: 'Organisation',
         children: buildTree(null) 
     };
 
