@@ -34,6 +34,6 @@ hierarKEY is a web-based application designed to help HR professionals and team 
 - **Frontend**: React + Material UI  
 - **Backend**: Node.js + Express  
 - **Database**: Supabase (PostgreSQL)  
-- **Hosting**: Render / GitHub Pages
+- **Hosting**: Render + GitHub Pages
 
 ---
