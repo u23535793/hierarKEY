@@ -1,27 +1,11 @@
 import React, { useRef, useState, useEffect, useLayoutEffect} from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { Typography, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Tree from 'react-d3-tree';
 
 import NavBar from '../components/navbar'; 
 import { hash, getNumEmployees, getNumManagers, getNumEditors, getEmplOverview } from '../requests/read';
-
-const data = {
-  name: 'Organization',
-  children: [
-    {
-      name: 'Employees',
-      children: [{ name: 'Alice' }, { name: 'Bob' }],
-    },
-    {
-      name: 'Managers',
-      children: [{ name: 'Carol' }],
-    },
-    {
-      name: 'Editors',
-      children: [{ name: 'Dave' }],
-    },
-  ],
-};
+import BuildTree from '../components/buildTree';
 
 export default function Dashboard() {
   const [numEmployees, setNumEmployees] = useState(null);
@@ -30,6 +14,8 @@ export default function Dashboard() {
   const [employees, setEmployees] = useState([]);
   const treeContainer = useRef(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [treeData, setTreeData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const email = sessionStorage.getItem('email');
@@ -37,14 +23,16 @@ export default function Dashboard() {
 
     const authenticate = async () => { 
       if (!email || !access) {
-        // logout
+        sessionStorage.clear();
+        navigate('/');
         return;
       }
 
       try {
         const check = await hash(email); 
         if (access !== check) {
-          // logout
+          sessionStorage.clear();
+          navigate('/');
           return; 
         } 
       }
@@ -85,8 +73,10 @@ export default function Dashboard() {
 
     const fetchEmployees = async () => {
       try {
-        const count = await getEmplOverview(email);
-        setEmployees(count);
+        const data = await getEmplOverview(email);
+        const tree = BuildTree(data, 'position'); 
+        setTreeData(tree);
+        setEmployees(data);
       } 
       catch (error) {
         console.error('Failed to fetch employees:', error);
@@ -98,7 +88,7 @@ export default function Dashboard() {
     fetchNumManagers();
     fetchNumEditors();
     fetchEmployees();
-  }, []);
+  }, [navigate]);
 
   useLayoutEffect(() => {
     if (treeContainer.current) {
@@ -109,6 +99,21 @@ export default function Dashboard() {
       });
     }
   }, []);
+
+  const renderNode = ({ nodeDatum, toggleNode }) => (
+    <g>
+      <circle r={8} fill={nodeDatum.children ? '#05344aff' : '#cb9043'} onClick={toggleNode} />
+      <text
+        fill="#000"
+        x={20}       
+        y={10}        
+        style={{ fontSize: '10px', userSelect: 'none', letterSpacing: '1px' }}
+        onClick={toggleNode}
+      >
+        {nodeDatum.name}
+      </text>
+    </g>
+  );
 
   return (
     <>
@@ -156,25 +161,20 @@ export default function Dashboard() {
         <Box ref={treeContainer} sx={{ width: '50%', height: '82vh', backgroundColor: 'white', p: 1,  boxShadow: 4, borderRadius: 4 }}>
           <Typography variant="h6" color='primary' sx={{ textAlign: 'center', width: '100%' }}>Organisation Overview</Typography>
           <Box component="hr" sx={{ width: '60%', borderTop: '3px solid #cb9043', mx: 'auto', my: 2 }} />
-          <Tree
-            data={data}
-            orientation="vertical"
-            pathFunc="elbow"
-            translate={translate}
-            nodeSize={{ x: 150, y: 60 }}
-            styles={{
-              nodes: {
-                node: {
-                  circle: { fill: '#1976d2' },
-                  name: { stroke: 'none', fill: '#fff' },
-                },
-                leafNode: {
-                  circle: { fill: '#388e3c' },
-                  name: { stroke: 'none', fill: '#fff' },
-                },
-              },
-            }}
-          />
+          {treeData ? (
+            <Tree
+              data={treeData}
+              orientation="vertical"
+              pathFunc="step"
+              translate={translate}
+              nodeSize={{ x: 140, y: 80 }}
+              renderCustomNodeElement={renderNode}
+            />
+          ) : (
+            <Typography sx={{ textAlign: 'center', mt: 4 }}>
+              Loading Hierarchy...
+            </Typography>
+          )}
         </Box>
       </Box>
     </>

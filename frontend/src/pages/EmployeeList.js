@@ -1,8 +1,9 @@
 import React, { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import PropTypes from 'prop-types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
 import { Box, Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, FormControlLabel, Switch } from '@mui/material';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid, Alert } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Autocomplete, Button, TextField, Grid, Alert } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
@@ -12,7 +13,7 @@ import NavBar from '../components/navbar';
 import { hash, getEmplDetails, isEditor } from '../requests/read';
 import { addEmployee } from '../requests/create';
 
-function AddEmployeePopup({ open, handleClose, handleSubmit }) {
+function AddEmployeePopup({ open, handleClose, handleSubmit, managerOptions}) {
   const [formData, setFormData] = useState({
     emp_num: '',
     name: '',
@@ -40,7 +41,7 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
     const editor = await isEditor(currEmail); 
     console.log(editor); 
 
-    const { name, surname, email } = formData;
+    const { name, surname, email, manager } = formData;
 
     if (!name?.trim() || !surname?.trim() || !email?.trim()) {
       setError('Please fill in all required fields: Name, Surname, and Email.');
@@ -50,6 +51,11 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (email.trim() === manager.trim()) {
+      setError('An employee cannot be their own manager.');
       return;
     }
 
@@ -68,7 +74,7 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
       <DialogTitle>Add New Employee</DialogTitle>
       {error && <Alert severity="warning" sx={{ mb: 2 }}>{error}</Alert>}
       <DialogContent>
-        <Grid container spacing={2} mt={1}>
+        <Grid container spacing={2} mt={1} >
           {[
             { name: 'emp_num', label: 'Employee Number' },
             { name: 'dob', label: 'Date of Birth', type: 'date' },
@@ -77,7 +83,6 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
             { name: 'email', label: 'Email', required: true },
             { name: 'position', label: 'Position' },
             { name: 'salary', label: 'Salary', type: 'number' },
-            { name: 'manager', label: 'Manager Email' },
           ].map((field) => (
             <Grid item xs={12} sm={12} key={field.name}>
               <TextField
@@ -94,8 +99,31 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
               />
             </Grid>
           ))}
+          <Grid item xs={12} sm={12} sx={{ width: '45%' }}>
+            <Autocomplete
+              fullWidth
+              options={managerOptions}
+              getOptionLabel={(option) => option}
+              value={formData.manager}
+              onChange={(event, newValue) => {
+                setFormData(prev => ({ ...prev, manager: newValue || '' }));
+                if (error) setError('');
+              }}
+              renderInput={(params) => (
+                <TextField              
+                  {...params}
+                  label="Manager Email"
+                  margin="dense"
+                  variant="outlined"
+                  fullWidth
+                />
+              )}
+              freeSolo
+              clearOnEscape
+            />
+          </Grid>
           <Grid item xs={12}>
-            <FormControlLabel
+            <FormControlLabel 
               control={
                 <Checkbox
                   checked={formData.editor}
@@ -144,11 +172,11 @@ const headCells = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'surname', numeric: false, disablePadding: true, label: 'Surname' },
   { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
-  { id: 'dob', numeric: false, disablePadding: false, label: 'Date of Birth' },
-  { id: 'position', numeric: false, disablePadding: false, label: 'Position' },
-  { id: 'salary', numeric: false, disablePadding: false, label: 'Salary' },
-  { id: 'manager', numeric: false, disablePadding: false, label: 'Manager Email' },
-  { id: 'editor', numeric: false, disablePadding: false, label: 'Editor' }
+  { id: 'dob', numeric: false, disablePadding: true, label: 'Date of Birth' },
+  { id: 'position', numeric: false, disablePadding: true, label: 'Position' },
+  { id: 'salary', numeric: false, disablePadding: true, label: 'Salary' },
+  { id: 'manager', numeric: false, disablePadding: true, label: 'Manager Email' },
+  { id: 'editor', numeric: false, disablePadding: true, label: 'Editor' }
 ];
 
 function EnhancedTableHead(props) {
@@ -256,6 +284,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EmployeeList() {
+  const navigate = useNavigate();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
@@ -284,14 +313,16 @@ export default function EmployeeList() {
   
     const authenticate = async () => { 
       if (!email || !access) {
-        // logout
+        sessionStorage.clear();
+        navigate('/');
         return;
       }
   
       try {
         const check = await hash(email); 
         if (access !== check) {
-          // logout
+          sessionStorage.clear();
+          navigate('/');
           return; 
         } 
       }
@@ -312,7 +343,7 @@ export default function EmployeeList() {
   
     authenticate(); 
     fetchEmployees();
-  }, []);
+  }, [navigate]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -466,6 +497,7 @@ export default function EmployeeList() {
         open={openAddPopup}
         handleClose={handleCloseAddPopup}
         handleSubmit={handleAddEmployeeSubmit}
+        managerOptions={rows.map(emp => emp.email).filter(Boolean)}
       />
     </Box>
   );
