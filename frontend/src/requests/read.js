@@ -208,3 +208,61 @@ export async function getEmplDetails(email) {
         return null;
     }
 }
+
+export async function getOrgID(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/employees/get_org_id?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function getOrgAccess(org_id) {
+    try {
+        const response = await fetch(`http://localhost:3001/organisations/org_access?id=${encodeURIComponent(org_id)}`);
+        const result = await response.json();
+
+        // console.log(result); 
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}
+
+export async function isEditor(email) {
+    try {
+        const response = await fetch(`http://localhost:3001/oemployees/is_editor?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } 
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    } 
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+}

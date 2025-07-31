@@ -32,32 +32,32 @@ export default function Landing() {
 
         <Box sx={{ flex: { xs: 'none', md: 8 }, p: 2 }}>
           <Stack spacing={2} alignItems="center">
-            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
+            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap" width={'100%'}>
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }}>
                 <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>
             </Stack>
 
-            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
+            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap" width={'100%'}>
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }}>
                 <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>             
             </Stack>
 
-            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }}>
+            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap" width={'100%'}>
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }}>
                 <Box component="img" src={Logo} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </Box>              
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
+              <Box sx={{ width: '25%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />
             </Stack>
 
-            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />             
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />    
-              <Box sx={{ width: 180, height: 120, backgroundColor: 'primary.main', borderRadius: 1 }} />    
+            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap" width={'100%'}>
+              <Box sx={{ width: '23%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />             
+              <Box sx={{ width: '23%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />
+              <Box sx={{ width: '23%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />    
+              <Box sx={{ width: '23%', height: '16vh', backgroundColor: 'primary.main', borderRadius: 1 }} />    
             </Stack>
           </Stack>
         </Box>

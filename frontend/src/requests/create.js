@@ -1,4 +1,4 @@
-import { hash } from './read'
+import { hash, getOrgID, getOrgAccess } from './read'
 
 export async function insertOrganisation(orgName) {
     try {
@@ -62,6 +62,41 @@ export async function signUp(orgName, name, surname, email, password) {
             sessionStorage.setItem('email', email);
             const access = await hash(email); 
             sessionStorage.setItem('access', access);
+            return result; 
+        }
+        else {
+            console.error('Server error:', result.error);
+            return null;
+        }
+    }
+    catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }  
+}
+
+export async function addEmployee(currEmail, emp_num, dob, email, name, surname, position, salary, manager, editor) {
+    const org_id = await getOrgID(currEmail); 
+    // console.log(org_id); 
+    const access = await getOrgAccess(org_id); 
+    // console.log(access); 
+
+    const empNumValue = emp_num && emp_num.trim() !== '' ? emp_num : null;
+    const dobValue = dob && dob.trim() !== '' ? dob : null;
+    const positionValue = position && position.trim() !== '' ? position : null;
+    const salaryValue = salary && salary !== '' ? parseFloat(salary) : null;
+    const managerValue = manager && manager.trim() !== '' ? manager : null;
+
+    try {
+        const response = await fetch('http://localhost:3001/employees/new_empl', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emp_num: empNumValue, dob: dobValue, email, password: access, name, surname, org_id, position: positionValue, salary: salaryValue, manager: managerValue, editor })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
             return result; 
         }
         else {

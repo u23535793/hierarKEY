@@ -28,7 +28,7 @@ router.post('/signup', async (req, res) => {
     let user_id;
 
     try {
-        const { data: authData, error: authError } = await supabase.auth.signUp({ email, password, email_confirm: true });
+        const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
 
         if (authError) {
             console.error('Sign up error:', authError);
@@ -36,7 +36,7 @@ router.post('/signup', async (req, res) => {
         }
 
         if (!authData || !authData.user) {
-            console.error('Signup returned no user:', data);
+            console.error('Signup returned no user:', authData);
             return res.status(500).json({ error: 'Signup failed to return a user.' });
         }
 
@@ -201,6 +201,100 @@ router.get('/emp_details', async (req, res) => {
         if (error) {
             console.error('Error getting employee details:', error);  
             return res.status(500).json({ error: 'Failed to get employee details' });
+        }
+        
+        res.status(200).json(data);
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// get org_id with email 
+router.get('/get_org_id', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('get_org_id', {emp_email});
+
+        if (error) {
+            console.error('Error getting organisation ID:', error);  
+            return res.status(500).json({ error: 'Failed to get organisation ID' });
+        }
+        
+        res.status(200).json(data);
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// add new employee
+router.post('/new_empl', async (req, res) => {
+    // console.log(req.body);
+    const { emp_num, dob, email, password, name, surname, org_id, position, salary, manager, editor } = req.body;
+    let user_id;
+
+    try {
+        const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
+
+        if (authError) {
+            console.error('Add employee error:', authError);
+            return res.status(400).json({ error: authError.message });
+        }
+
+        if (!authData || !authData.user) {
+            console.error('Add employee returned no user:', authData);
+            return res.status(500).json({ error: 'Add employee failed to return a user.' });
+        }
+
+        user_id = authData.user.id;
+    } 
+    catch (err) {
+        console.error('Unexpected error during add employee:', err);
+        return res.status(500).json({ error: 'Unexpected error during add employee.' });
+    }
+
+    try {
+        const { error } = await supabase.rpc('add_employee', { 
+            emp_dob: dob,
+            emp_editor: editor,
+            emp_email: email, 
+            emp_id: user_id,
+            emp_name: name, 
+            emp_num,
+            emp_pos: position,
+            emp_sal: salary, 
+            emp_manager: manager,
+            emp_surname: surname,
+            emp_org_id: org_id
+        });
+
+        if (error) {
+            console.error('Add employee  error:', error);
+            return res.status(500).json({ error: 'Failed to add employee' });
+        }
+
+        res.status(201).json({ message: 'Add employee successful' });
+    } 
+    catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+    }
+});
+
+// check if employee is an editor 
+router.get('/is_editor', async (req, res) => {
+    try {
+        const emp_email = req.query.email;
+
+        const { data, error } = await supabase.rpc('is_editor', {emp_email});
+
+        if (error) {
+            console.error('Error checking if user is an editor:', error);  
+            return res.status(500).json({ error: 'Failed to check if user is an editor' });
         }
         
         res.status(200).json(data);

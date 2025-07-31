@@ -2,14 +2,15 @@ import React, { useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
 import { Box, Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, FormControlLabel, Switch } from '@mui/material';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid, Alert } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { visuallyHidden } from '@mui/utils';
 
 import NavBar from '../components/navbar'; 
-import { hash, getEmplDetails } from '../requests/read';
+import { hash, getEmplDetails, isEditor } from '../requests/read';
+import { addEmployee } from '../requests/create';
 
 function AddEmployeePopup({ open, handleClose, handleSubmit }) {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
     manager: '',
     editor: false, 
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -30,10 +32,29 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    if (error) setError('');
   };
 
-  const handleLocalSubmit = () => {
-    console.log('Submitted employee:', formData);
+  const handleLocalSubmit = async () => {
+    const currEmail = sessionStorage.getItem('email');
+    const editor = await isEditor(currEmail); 
+    console.log(editor); 
+
+    const { name, surname, email } = formData;
+
+    if (!name?.trim() || !surname?.trim() || !email?.trim()) {
+      setError('Please fill in all required fields: Name, Surname, and Email.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    setError('');
+
     handleSubmit(formData); 
     setFormData({ 
       emp_num: '', name: '', surname: '', email: '', dob: '',
@@ -45,14 +66,15 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>Add New Employee</DialogTitle>
+      {error && <Alert severity="warning" sx={{ mb: 2 }}>{error}</Alert>}
       <DialogContent>
         <Grid container spacing={2} mt={1}>
           {[
             { name: 'emp_num', label: 'Employee Number' },
             { name: 'dob', label: 'Date of Birth', type: 'date' },
-            { name: 'name', label: 'First Name' },
-            { name: 'surname', label: 'Surname' },
-            { name: 'email', label: 'Email' },
+            { name: 'name', label: 'First Name', required: true },
+            { name: 'surname', label: 'Surname', required: true },
+            { name: 'email', label: 'Email', required: true },
             { name: 'position', label: 'Position' },
             { name: 'salary', label: 'Salary', type: 'number' },
             { name: 'manager', label: 'Manager Email' },
@@ -60,6 +82,7 @@ function AddEmployeePopup({ open, handleClose, handleSubmit }) {
             <Grid item xs={12} sm={12} key={field.name}>
               <TextField
                 fullWidth
+                required={field.required || false}
                 variant="outlined"
                 margin="dense"
                 label={field.label}
@@ -244,11 +267,15 @@ export default function EmployeeList() {
   const handleOpenAddPopup = () => setOpenAddPopup(true);
   const handleCloseAddPopup = () => setOpenAddPopup(false);
 
-  const handleAddEmployeeSubmit = (newEmployeeData) => {
-    console.log('New employee data received:', newEmployeeData);
-    // For now, let's just add it to the local state (for demonstration)
-    setEmployees(prevEmployees => [...prevEmployees, { ...newEmployeeData, id: prevEmployees.length + 1 }]);
-    // You might also want to re-fetch data from the backend after a successful add
+  const handleAddEmployeeSubmit = async (newEmployeeData) => {
+    const currEmail = sessionStorage.getItem('email');
+    const { emp_num, dob, email, name, surname, position, salary, manager, editor} = newEmployeeData;
+
+    const result = await addEmployee(currEmail, emp_num, dob, email, name, surname, position, salary, manager, editor);
+
+    if (result) {
+      setEmployees(prev => [...prev, { ...newEmployeeData, id: prev.length + 1 }]);
+    }
   };
   
   useEffect(() => {
@@ -381,6 +408,7 @@ export default function EmployeeList() {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
+                    <>
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
@@ -403,7 +431,9 @@ export default function EmployeeList() {
                     <TableCell align="left" padding="none">{row.position}</TableCell>
                     <TableCell align="left" padding="none">{row.salary}</TableCell>
                     <TableCell align="left" padding="none">{row.manager}</TableCell>
-                    <TableCell align="left" padding="none">{row.editor ? 'Yes' : 'No'}</TableCell>                  </TableRow>
+                    <TableCell align="left" padding="none">{row.editor ? 'Yes' : 'No'}</TableCell>   
+                    </>               
+                  </TableRow>
                 );
               })}
               {emptyRows > 0 && (

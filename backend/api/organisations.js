@@ -61,6 +61,25 @@ router.post('/insert', async (req, res) => {
   }
 });
 
+// get org acces
+router.get('/org_access', async (req, res) => {
+  try {
+    const p_org_id = req.query.id;
+    const { data, error } = await supabase.rpc('get_org_access', { p_org_id });
+
+    if (error) {
+      console.error('Error getting organisation access:', error);  
+      return res.status(500).json({ error: 'Failed to get organisation access' });
+    }
+
+    res.status(200).json(decrypt(data));
+  } 
+  catch (err) {
+    console.error('Unexpected error:', err);
+    res.status(500).json({ error: 'Unexpected error occurred' });
+  }
+});
+
 module.exports = router;
 
 //functions
